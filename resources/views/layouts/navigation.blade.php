@@ -44,6 +44,10 @@
 
                 <x-nav-link href="profile" :active="request()->routeIs('profile.edit')">
                     {{ __('My Profile') }} 
+                </x-nav-link> 
+
+                <x-nav-link href="profile" :active="request()->routeIs('profile.edit')">
+                    {{ __('Contact') }} 
                 </x-nav-link>  
                 @endif
                 </div>
