@@ -16,7 +16,7 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-
+                <!-- hello -->
                 <!-- Admin  links-->
                  @if (Auth::user()->usertype == 'admin')
                 <x-nav-link href="admin/student" :active="request()->routeIs('admin.student')">
