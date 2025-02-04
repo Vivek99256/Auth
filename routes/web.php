@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Middleware\UserMiddleware;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\FavouriteController;
+use App\Http\Controllers\StudentController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -29,5 +30,22 @@ Route::middleware(['auth','userMiddleware'])->group(function(){
 Route::middleware(['auth','adminMiddleware'])->group(function(){
 
     Route::get('/admin/dashboard', [AdminController::class,'index'])->name('admin.dashboard');
+    Route::get('admin/students/create', [StudentController::class, 'create'])->name('students.create');
+    Route::match(['get', 'post'], '/students', [StudentController::class, 'store']);
+    Route::resource('students', StudentController::class);
+    Route::get('/students', [StudentController::class, 'index']);
+    Route::post('/students', [StudentController::class, 'store'])->name('students.store');
+    Route::match(['get', 'post'],'admin/students/index', [StudentController::class, 'index'])->name('students.index');
+
+   
+   
+    Route::get('/admin/students/past', function () {
+        return view('admin.students.past');
+    })->name('students.past');
+
+    Route::get('/admin/students/edit', function () { return view ('admin.students.edit');})->name('students.edit');
+    Route::get('/admin/students/family', function () { return view ('admin.students.family');})->name('students.family');
+    Route::get('/admin/students/document', function () { return view ('admin.students.document');})->name('students.document');
+    Route::get('/admin/students', [StudentController::class, 'index'])->name('students.index');
 
 });
