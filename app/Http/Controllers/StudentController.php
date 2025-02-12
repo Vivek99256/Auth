@@ -9,20 +9,30 @@ use Carbon\Carbon;
 
 class StudentController extends Controller
 {
+    /**
+     * Display a listing of the students.
+     */
     public function index()
     {
         $students = Student::all()->map(function ($student) {
             $student->birthdate = $student->birthdate ? Carbon::parse($student->birthdate)->format('d-m-Y') : null;
             return $student;
         });
+
         return view('admin.students.index', compact('students'));
     }
 
+    /**
+     * Show the form for creating a new student.
+     */
     public function create()
     {
         return view('admin.students.create');
     }
 
+    /**
+     * Store a newly created student in storage.
+     */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -59,19 +69,21 @@ class StudentController extends Controller
         return redirect()->route('students.index')->with('success', 'Student created successfully.');
     }
 
+    /**
+     * Show the form for editing the specified student.
+     */
     public function edit($id)
-{
-    $student = Student::findOrFail($id); // Fetch student by ID
-    return view('admin.students.edit', compact('student')); // Correct path
-}
-
-
-
-    public function update(Request $request, $id)
     {
         $student = Student::findOrFail($id);
-        
-        $validatedData = $request->validate([
+        return view('admin.students.edit', compact('student'));
+    }
+
+    /**
+     * Update the specified student in storage.
+     */
+    public function update(Request $request, Student $students)
+    {
+        $request->validate([
             'stud_name' => 'required|string|max:255',
             'mid_name' => 'nullable|string|max:255',
             'surname' => 'required|string|max:255',
@@ -94,18 +106,22 @@ class StudentController extends Controller
             'adhar_no' => 'required|string|max:20',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-
+    
+        // Update student details (excluding photo)
+        $students->fill($request->except('photo'));
+    
+        // Handle photo upload
         if ($request->hasFile('photo')) {
-            if ($student->photo) {
-                Storage::disk('public')->delete($student->photo);
+            if ($students->photo) {
+                Storage::disk('public')->delete($students->photo); // Delete old photo
             }
-            $photoPath = $request->file('photo')->store('photos', 'public');
-            $validatedData['photo'] = $photoPath;
+            $path = $request->file('photo')->store('photos', 'public');
+            $students->photo = $path;
         }
-
-        $student->update($validatedData);
-
-        return redirect()->route('students.index')->with('success', 'Student updated successfully.');
-
+    
+        $students->save();
+    
+        return redirect()->route('admin.students.index')->with('success', 'Student updated successfully.');
     }
+    
 }

@@ -1,4 +1,12 @@
 <x-app-layout>
+    <style>
+    body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #E3FDFD, #FFE6FA);
+            margin: 0;
+            padding: 0;
+        }
+        </style>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}

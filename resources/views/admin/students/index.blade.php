@@ -1,10 +1,10 @@
 <x-app-layout>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #E3FDFD, #FFE6FA);
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
         }
         .nav-bar {
             background-color: #00AEEF;
@@ -121,6 +121,15 @@
             text-decoration: none;
             cursor: pointer;
         }
+        .btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
     </style>
 
     <div class="container py-4">
@@ -163,13 +172,23 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>
-                                <a href="{{ route('students.edit', $student->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('students.destroy', $student->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this student?')">Delete</button>
-                                </form>
-                            </td>
+    <div style="display: flex; gap: 5px;">
+        <a href="{{ route('students.edit', $student->id ?? '') }}" class="btn btn-warning btn-sm"
+            style="display: flex; align-items: center; gap: 5px; background: #ffc107; color: black; font-weight: bold; padding: 8px 12px; border-radius: 5px; text-decoration: none;">
+            ✏️ Edit
+        </a>
+
+        <form action="{{ route('students.destroy', $student->id) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger btn-sm"
+                style="display: flex; align-items: center; gap: 5px; background: #dc3545; color: white; font-weight: bold; padding: 8px 12px; border-radius: 5px; border: none; cursor: pointer;"
+                onclick="return confirm('Are you sure you want to delete this student?')">
+                🗑️ Delete
+            </button>
+        </form>
+    </div>
+</td>
                             <td>{{ $student->stud_name }}</td>
                             <td>{{ $student->mid_name }}</td>
                             <td>{{ $student->surname }}</td>

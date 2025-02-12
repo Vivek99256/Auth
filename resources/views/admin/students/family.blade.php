@@ -1,8 +1,10 @@
 <x-app-layout>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #E3FDFD, #FFE6FA);
+            margin: 0;
+            padding: 0;
         }
         .nav-bar {
             background-color: #00AEEF;
@@ -84,14 +86,14 @@
 
     <div class="container">
 
-        <form action="{{ route('students.family') }}" method="POST">
+        <form action="{{ route('students.family',$student->id ?? '') }}" method="POST">
             @csrf
 
             <div class="nav-bar rounded">
-                <a href="{{ route('students.edit') }}">Student Information</a>
-                <a href="{{ route('students.past') }}">Past Education</a>
-                <a href="{{ route('students.family') }}" class="active">Family History</a>
-                <a href="{{ route('students.document') }}">Documents</a>
+                <a href="{{ route('students.edit', $student->id ?? '')  }}">Student Information</a>
+                <!-- <a href="{{ route('students.past', $student->id ?? '') }}">Past Education</a>
+                <a href="{{ route('students.family',$student->id ?? '') }}" class="active">Family History</a> -->
+                <a href="{{ route('students.document', $student->id ?? '') }}">Documents</a>
             </div>
 
             <div id="family-fields">

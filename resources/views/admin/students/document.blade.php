@@ -1,8 +1,10 @@
 <x-app-layout>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #E3FDFD, #FFE6FA);
+            margin: 0;
+            padding: 0;
         }
         .nav-bar {
             background-color: #00AEEF;
@@ -94,56 +96,70 @@
 
     <div class="container">
         
+        
+        <form action="{{ route('document.store') }}" method="POST" enctype="multipart/form-data">
         <div class="nav-bar rounded">
-            <a href="{{ route('students.edit') }}">Student Information</a>
-            <a href="{{ route('students.past') }}">Past Education</a>
-            <a href="{{ route('students.family') }}">Family History</a>
-            <a href="{{ route('students.document') }}" class="active">Documents</a>
+            <a href="{{ route('students.edit', $student->id ?? '')  }}" >Student Information</a>
+            <!-- <a href="{{ route('students.past',$student->id ?? '') }}">Past Education</a>
+            <a href="{{ route('students.family',$student->id ?? '') }}">Family History</a> -->
+            <a href="{{ route('students.document', $student->id ?? '') }}" class="active">Documents</a>
         </div>
+    @csrf
+    <input type="hidden" name="student_id" value="{{ $student->id }}">
+    <div class="form-group">
+        <label for="docType">Document Type</label>
+        <select id="docType" name="document_type">  <!-- ✅ Added name="document_type" -->
+            <option value="">Select</option>
+            <option value="Birth Certificate">Birth Certificate</option>
+            <option value="Income Proof">Income Proof</option>
+            <option value="Student Achievement Certificates">Student Achievement Certificates</option>
+            <option value="Leaving Certificate">Leaving Certificate</option>
+        </select>
+    </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="docType">Document Type</label>
-                    <select id="docType">
-                        <option value="">Select</option>
-                        <option value="Birth Certificate">Birth Certificate</option>
-                        <option value="Income Proof">Income Proof</option>
-                        <option value="Student Achievement Certificates">Student Achievement Certificates</option>
-                        <option value="Leaving Certificate">Leaving Certificate</option>
-                    </select>
-                </div>
-            </div>
+    <div class="form-group">
+        <label for="docTitle">Document Title</label>
+        <input type="text" id="docTitle" name="document_title" placeholder="Enter document title"> <!-- ✅ Added name -->
+    </div>
 
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="docTitle">Document Title</label>
-                    <input type="text" id="docTitle" placeholder="Enter document title">
-                </div>
-            </div>
+    <div class="form-group">
+        <label for="fileUpload">Upload File</label>
+        <input type="file" id="fileUpload" name="file_name"> <!-- ✅ Must match backend -->
+    </div>
 
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="fileUpload">File</label>
-                    <input type="file" id="fileUpload">
-                </div>
-            </div>
-        </div>
+    <button type="submit" class="btn btn-success">Save</button>
+</form>
 
-        <button class="btn btn-success" onclick="saveDocument()">Save</button>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Sr No.</th>
-                    <th>Document Type</th>
-                    <th>Document Title</th>
-                    <th>Date</th>
-                    <th>File Name</th>
-                </tr>
-            </thead>
-            <tbody id="docTableBody"></tbody>
-        </table>
+@if(isset($documents) && $documents->isNotEmpty())  
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Document Type</th>
+                        <th>Document Title</th>
+                        <th>File</th>
+                        <th>Uploaded At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($documents as $doc)  
+                    <tr>
+                        <td>{{ $doc->id }}</td>
+                        <td>{{ $doc->document_type }}</td>
+                        <td>{{ $doc->document_title }}</td>
+                        <td>
+                            <a href="{{ asset('uploads/documents/' . $doc->file_name) }}" target="_blank">
+                                {{$doc->file_name}}
+                            </a>
+                        </td>
+                        <td>{{ $doc->created_at->format('Y-m-d H:i:s') }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <p>No documents found.</p>
+        @endif
     </div>
 
     <script>

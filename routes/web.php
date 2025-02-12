@@ -7,6 +7,8 @@ use App\Http\Controllers\Middleware\UserMiddleware;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\FavouriteController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\PastEducationController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -47,5 +49,13 @@ Route::middleware(['auth','adminMiddleware'])->group(function(){
     Route::get('/admin/students/family', function () { return view ('admin.students.family');})->name('students.family');
     Route::get('/admin/students/document', function () { return view ('admin.students.document');})->name('students.document');
     Route::get('/admin/students', [StudentController::class, 'index'])->name('students.index');
+    Route::post('/document/store', [DocumentController::class, 'store']);
+    Route::post('admin/document/store', [DocumentController::class, 'store'])->name('document.store');
+    Route::get('/admin/students/document/{id}', [DocumentController::class, 'index'])->name('students.document');
+    Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
+   // Route::resource('students', StudentController::class);
+    Route::put('/admin/students/{id}', [StudentController::class, 'update'])->name('students.update');
 
+    Route::post('/past-education/store', [PastEducationController::class, 'store'])->name('past-education.store');
+    Route::get('/past-education/create/{student_id}', [PastEducationController::class, 'create'])->name('past.create');
 });

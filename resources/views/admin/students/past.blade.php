@@ -1,10 +1,10 @@
 <x-app-layout>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+       body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #E3FDFD, #FFE6FA);
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
         }
         .nav-bar {
             background-color: #00AEEF;
@@ -78,14 +78,14 @@
     </style>
 
     <div class="container">
-        <form action="{{ route('students.past') }}" method="POST">
+        <form action="{{ route('past-education.store') }}" method="POST">
             @csrf
 
             <div class="nav-bar rounded">
-                <a href="{{ route('students.edit') }}">Student Information</a>
-                <a href="{{ route('students.past') }}" class="active">Past Education</a>
-                <a href="{{ route('students.family') }}">Family History</a>
-                <a href="{{ route('students.document') }}">Documents</a>
+            <a href="{{ route('students.edit', $student->id ?? '') }}" >Student Information</a>
+                <!-- <a href="{{ route('students.past', $student->id ?? '') }}" class="active">Past Education</a>
+                <a href="{{ route('students.family', $student->id ?? '') }}">Family History</a> -->
+                <a href="{{ route('students.document', $student->id ?? '') }}">Documents</a>
             </div>
 
             <div id="education-fields">
@@ -93,15 +93,16 @@
                 <div class="education-group">
                     <div class="row">
                         <div class="col-md-6">
+                        <input type="hidden" name="past_id" value="{{ $student->id ?? '' }}">
                             <div class="form-group">
                                 <label>Medium</label>
-                                <input type="text" name="medium[]" placeholder="Enter Medium">
+                                <input type="text" name="medium" placeholder="Enter Medium">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Name of Board</label>
-                                <input type="text" name="board_name[]" placeholder="Enter Board Name">
+                                <input type="text" id="name_of_board" name="name_of_board" placeholder="Enter Board Name">
                             </div>
                         </div>
                     </div>
@@ -109,13 +110,13 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Year</label>
-                                <input type="text" name="year[]" placeholder="Enter Year">
+                                <input type="text" name="year" placeholder="Enter Year">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Percentage</label>
-                                <input type="text" name="percentage[]" placeholder="Enter Percentage">
+                                <input type="text" name="percentage" placeholder="Enter Percentage">
                             </div>
                         </div>
                     </div>
@@ -123,13 +124,13 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>School Name</label>
-                                <input type="text" name="school_name[]" placeholder="Enter School Name">
+                                <input type="text" name="school_name" placeholder="Enter School Name">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Place</label>
-                                <input type="text" name="place[]" placeholder="Enter Place">
+                                <input type="text" name="place" placeholder="Enter Place">
                             </div>
                         </div>
                     </div>
@@ -137,7 +138,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Trial</label>
-                                <input type="text" name="trial[]" placeholder="Enter Trial">
+                                <input type="text" name="trial" placeholder="Enter Trial">
                             </div>
                         </div>
                     </div>
@@ -161,13 +162,13 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Medium</label>
-                            <input type="text" name="medium[]" placeholder="Enter Medium">
+                            <input type="text" name="medium" placeholder="Enter Medium">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Name of Board</label>
-                            <input type="text" name="board_name[]" placeholder="Enter Board Name">
+                            <input type="text" name="name_of_board" placeholder="Enter Board Name">
                         </div>
                     </div>
                 </div>
@@ -175,13 +176,13 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Year</label>
-                            <input type="text" name="year[]" placeholder="Enter Year">
+                            <input type="text" name="year" placeholder="Enter Year">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Percentage</label>
-                            <input type="text" name="percentage[]" placeholder="Enter Percentage">
+                            <input type="text" name="percentage" placeholder="Enter Percentage">
                         </div>
                     </div>
                 </div>
@@ -189,13 +190,13 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>School Name</label>
-                            <input type="text" name="school_name[]" placeholder="Enter School Name">
+                            <input type="text" name="school_name" placeholder="Enter School Name">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Place</label>
-                            <input type="text" name="place[]" placeholder="Enter Place">
+                            <input type="text" name="place" placeholder="Enter Place">
                         </div>
                     </div>
                 </div>
@@ -203,7 +204,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Trial</label>
-                            <input type="text" name="trial[]" placeholder="Enter Trial">
+                            <input type="text" name="trial" placeholder="Enter Trial">
                         </div>
                     </div>
                 </div>
