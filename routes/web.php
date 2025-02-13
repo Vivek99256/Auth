@@ -48,6 +48,7 @@ Route::middleware(['auth','adminMiddleware'])->group(function(){
     Route::get('/admin/students/edit', function () { return view ('admin.students.edit');})->name('students.edit');
     Route::get('/admin/students/family', function () { return view ('admin.students.family');})->name('students.family');
     Route::get('/admin/students/document', function () { return view ('admin.students.document');})->name('students.document');
+    Route::get('/admin/students/student_report', function () { return view ('admin.students.student_report');})->name('students.student_report');
     Route::get('/admin/students', [StudentController::class, 'index'])->name('students.index');
     Route::post('/document/store', [DocumentController::class, 'store']);
     Route::post('admin/document/store', [DocumentController::class, 'store'])->name('document.store');
@@ -68,6 +69,10 @@ Route::delete('/students/{student}/past/{pastEducation}', [StudentController::cl
 
 
 
-
+//student report
+Route::get('/student-report', [StudentController::class, 'reportPage'])->name('student.report');
+Route::get('/student-report-search', [StudentController::class, 'reportSearch'])->name('student.search');
+Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('students.delete');
+Route::get('/admin/students/pdf', [StudentController::class, 'generatePDF'])->name('student.pdf');
 
 });

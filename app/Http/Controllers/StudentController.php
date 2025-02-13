@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use Illuminate\Support\Facades\Storage;
@@ -189,5 +190,61 @@ public function editPast(Student $student)
     return redirect()->back()->with('success', 'Past education record deleted successfully.');
 }
 
+//studentreport
+
+public function reportPage()
+{
+    $students = Student::all(); // Fetch all student records
+    return view('student_report', compact('students'));
+}
+ 
+public function reportSearch(Request $request) {
+    $section = $request->section;
+    $standard = $request->standard;
+    $division = $request->division;
+
+    $students = Student::when($section, function ($q) use ($section) {
+        $q->where('section', $section);
+    })
+    ->when($standard, function ($q) use ($standard) {
+        $q->where('standard', $standard);
+    })
+    ->when($division, function ($q) use ($division) {
+        $q->where('division', $division);
+    })
+    ->get();
+
+    return view('admin.students.student_report', compact('students'));
+}
+
+public function generatePDF(Request $request)
+    {
+        // Get filter values
+        $section = $request->query('section');
+        $standard = $request->query('standard');
+        $division = $request->query('division');
+
+        // Fetch students based on search filters
+        $students = Student::query();
+
+        if ($section) {
+            $students->where('section', $section);
+        }
+
+        if ($standard) {
+            $students->where('standard', $standard);
+        }
+
+        if ($division) {
+            $students->where('division', $division);
+        }
+
+        $students = $students->get();
+
+        // Load PDF view with filtered data
+        $pdf = Pdf::loadView('admin.students.pdf', compact('students'));
+
+        return $pdf->download('student_report.pdf');
+    }
     
 }
