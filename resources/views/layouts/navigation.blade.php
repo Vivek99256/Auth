@@ -19,13 +19,10 @@
                 <!-- hello -->
                 <!-- Admin  links-->
                  @if (Auth::user()->usertype == 'admin')
-                <x-nav-link href="/admin/students/create" :active="request()->routeIs('students.create')">
+                <x-nav-link href="/admin/students/index" :active="request()->routeIs('admin.category')">
                     {{ __('Student') }} 
                 </x-nav-link>  
-
-                <x-nav-link href="/admin/students/index" :active="request()->routeIs('admin.category')">
-                    {{ __('Category') }} 
-                </x-nav-link>  
+ 
 
                 <x-nav-link href="admin/user" :active="request()->routeIs('admin.user')">
                     {{ __('User') }} 

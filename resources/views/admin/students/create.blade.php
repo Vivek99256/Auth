@@ -1,5 +1,11 @@
 <x-app-layout>
     <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #E3FDFD, #FFE6FA);
+            margin: 0;
+            padding: 0;
+        }
         /* Custom CSS for the form */
         .form-container {
             background: linear-gradient(135deg, #f9f9f9, #e0e0e0);
