@@ -60,4 +60,75 @@ class DocumentController extends Controller
             return response()->json(['message' => 'Failed to store document.'], 500);
         }
     }
+
+    public function destroy($id)
+{
+    $document = Document::find($id);
+    
+    if (!$document) {
+        return redirect()->back()->with('error', 'Document not found.');
+    }
+
+    // Delete the file from storage
+    $filePath = public_path('uploads/documents/' . $document->file_name);
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
+
+    // Delete from database
+    $document->delete();
+
+    return redirect()->back()->with('success', 'Document deleted successfully.');
+}
+
+
+public function edit($id)
+{
+    $document = Document::find($id);
+
+    if (!$document) {
+        return redirect()->back()->with('error', 'Document not found.');
+    }
+
+    return view('admin.students.documentedit', compact('document')); // ✅ Update view path
+}
+
+
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'document_type' => 'required|string',
+        'document_title' => 'required|string',
+        'file_name' => 'nullable|mimes:pdf,jpg,png|max:2048'
+    ]);
+
+    $document = Document::find($id);
+
+    if (!$document) {
+        return redirect()->back()->with('error', 'Document not found.');
+    }
+
+    // Update fields
+    $document->document_type = $request->document_type;
+    $document->document_title = $request->document_title;
+
+    // Handle file upload if a new file is provided
+    if ($request->hasFile('file_name')) {
+        // Delete old file
+        if (file_exists(public_path('uploads/documents/' . $document->file_name))) {
+            unlink(public_path('uploads/documents/' . $document->file_name));
+        }
+
+        // Store new file
+        $file = $request->file('file_name');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/documents'), $fileName);
+        $document->file_name = $fileName;
+    }
+
+    $document->save();
+
+    return redirect()->route('students.document', $document->student_id)->with('success', 'Document updated successfully.');
+}
+
 }

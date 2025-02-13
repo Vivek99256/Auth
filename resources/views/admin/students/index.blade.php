@@ -133,7 +133,14 @@
     </style>
 
     <div class="container py-4">
-        <h1 class="mb-4 text-center">Students List</h1>
+
+        <div class="student-list-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+    <h2>Student List</h2>
+    <a href="{{ route('students.create') }}" class="btn btn-success" style="padding: 8px 15px; text-decoration: none; color: white; background-color: green; border-radius: 5px;">
+        + Add Student
+    </a>
+</div>
+
         
 
         <!-- Table displaying student details -->

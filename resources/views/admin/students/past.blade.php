@@ -1,6 +1,6 @@
 <x-app-layout>
-    <style>
-       body {
+<style>
+        body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(to right, #E3FDFD, #FFE6FA);
             margin: 0;
@@ -49,168 +49,123 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .col-md-6 {
-            flex: 1 1 calc(50% - 15px);
-            box-sizing: border-box;
-        }
-        @media (max-width: 768px) {
-            .col-md-6 {
-                flex: 1 1 100%;
-            }
-            .nav-bar {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-        .education-group {
-            width: 100%;
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            background-color: #fafafa;
-        }
+
+        .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .table thead {
+        background: #00AEEF;
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .table th, .table td {
+        padding: 12px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table tbody tr:hover {
+        background: #f1f9ff;
+        transition: 0.3s;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
     </style>
-
-    <div class="container">
-        <form action="{{ route('past-education.store') }}" method="POST">
-            @csrf
-
-            <div class="nav-bar rounded">
-            <a href="{{ route('students.edit', $student->id ?? '') }}" >Student Information</a>
-                <!-- <a href="{{ route('students.past', $student->id ?? '') }}" class="active">Past Education</a>
-                <a href="{{ route('students.family', $student->id ?? '') }}">Family History</a> -->
+    <div class="container py-4">
+            <div class="nav-bar rounded py-2">
+                <a href="{{ route('students.edit',$student->id ?? '') }}" class="active">Student Information</a>
+                <a href="{{ route('students.past', $student->id ?? '') }}">Past Education</a>
+                <!-- <a href="{{ route('students.family', $student->id ?? '') }}">Family History</a> -->
                 <a href="{{ route('students.document', $student->id ?? '') }}">Documents</a>
             </div>
 
-            <div id="education-fields">
-                <!-- Initial Input Fields -->
-                <div class="education-group">
-                    <div class="row">
-                        <div class="col-md-6">
-                        <input type="hidden" name="past_id" value="{{ $student->id ?? '' }}">
-                            <div class="form-group">
-                                <label>Medium</label>
-                                <input type="text" name="medium" placeholder="Enter Medium">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Name of Board</label>
-                                <input type="text" id="name_of_board" name="name_of_board" placeholder="Enter Board Name">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Year</label>
-                                <input type="text" name="year" placeholder="Enter Year">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Percentage</label>
-                                <input type="text" name="percentage" placeholder="Enter Percentage">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>School Name</label>
-                                <input type="text" name="school_name" placeholder="Enter School Name">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Place</label>
-                                <input type="text" name="place" placeholder="Enter Place">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Trial</label>
-                                <input type="text" name="trial" placeholder="Enter Trial">
-                            </div>
-                        </div>
-                    </div>
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <form action="{{ route('students.past.store', $student->id) }}" method="POST">
+            @csrf
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="previous_school">Previous School Name</label>
+                    <input type="text" name="previous_school" required>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="last_standard">Last Standard Passed</label>
+                    <input type="text" name="last_standard" required>
                 </div>
             </div>
-
-            <div class="form-group">
-                <button type="button" id="addRow" class="btn btn-primary">Add More</button>
-                <button type="submit" class="btn btn-success">Save</button>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="percentage">Percentage Obtained</label>
+                    <input type="text" name="percentage" required>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="board">Board Name</label>
+                    <input type="text" name="board" required>
+                </div>
             </div>
+            <button type="submit" class="btn btn-success">Save</button>
         </form>
+
+        <h3 class="mt-4 text-center" style="color: #00AEEF; font-weight: bold;">📚 Past Education Records</h3>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>🛠 Action</th>
+                <th>🏫 Previous School</th>
+                <th>🎓 Last Standard</th>
+                <th>📊 Percentage</th>
+                <th>🏛 Board</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($pastEducationRecords as $key => $record)
+            <tr>
+                <td>
+                    <form action="{{ route('students.past.destroy', [$student->id, $record->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">🗑 Delete</button>
+                    </form>
+                </td>
+                <td>{{ $record->previous_school }}</td>
+                <td>{{ $record->last_standard }}</td>
+                <td>{{ $record->percentage }}%</td>
+                <td>{{ $record->board }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
     </div>
-
-    <script>
-        document.getElementById('addRow').addEventListener('click', function() {
-            let newFields = document.createElement('div');
-            newFields.classList.add('education-group'); // Ensure grouping
-
-            newFields.innerHTML = `
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Medium</label>
-                            <input type="text" name="medium" placeholder="Enter Medium">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Name of Board</label>
-                            <input type="text" name="name_of_board" placeholder="Enter Board Name">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Year</label>
-                            <input type="text" name="year" placeholder="Enter Year">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Percentage</label>
-                            <input type="text" name="percentage" placeholder="Enter Percentage">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>School Name</label>
-                            <input type="text" name="school_name" placeholder="Enter School Name">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Place</label>
-                            <input type="text" name="place" placeholder="Enter Place">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Trial</label>
-                            <input type="text" name="trial" placeholder="Enter Trial">
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('education-fields').appendChild(newFields); // Append at the bottom
-        });
-    </script>
 </x-app-layout>

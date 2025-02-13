@@ -53,16 +53,14 @@
 
     <div class="container py-4">
 
-    <form action="{{ route('students.update', $student->id ?? '') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('students.update', $student->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
-
-
-
+    
             <div class="nav-bar rounded py-2">
                 <a href="{{ route('students.edit',$student->id ?? '') }}" class="active">Student Information</a>
-                <!-- <a href="{{ route('students.past', $student->id ?? '') }}">Past Education</a>
-                <a href="{{ route('students.family', $student->id ?? '') }}">Family History</a> -->
+                <a href="{{ route('students.past', $student->id ?? '') }}">Past Education</a>
+                <!-- <a href="{{ route('students.family', $student->id ?? '') }}">Family History</a> -->
                 <a href="{{ route('students.document', $student->id ?? '') }}">Documents</a>
             </div>
 

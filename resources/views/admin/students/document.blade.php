@@ -100,8 +100,8 @@
         <form action="{{ route('document.store') }}" method="POST" enctype="multipart/form-data">
         <div class="nav-bar rounded">
             <a href="{{ route('students.edit', $student->id ?? '')  }}" >Student Information</a>
-            <!-- <a href="{{ route('students.past',$student->id ?? '') }}">Past Education</a>
-            <a href="{{ route('students.family',$student->id ?? '') }}">Family History</a> -->
+            <a href="{{ route('students.past', $student->id ?? '') }}">Past Education</a>
+            <!-- <a href="{{ route('students.family',$student->id ?? '') }}">Family History</a>  -->
             <a href="{{ route('students.document', $student->id ?? '') }}" class="active">Documents</a>
         </div>
     @csrf
@@ -134,7 +134,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Action</th>
                         <th>Document Type</th>
                         <th>Document Title</th>
                         <th>File</th>
@@ -144,7 +144,51 @@
                 <tbody>
                     @foreach($documents as $doc)  
                     <tr>
-                        <td>{{ $doc->id }}</td>
+                    <td>
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <!-- Edit Button -->
+        <a href="{{ route('document.edit', $doc->id) }}" 
+           class="btn btn-warning" 
+           style="
+               background-color: #ff9800; 
+               color: white; 
+               padding: 8px 15px; 
+               border-radius: 5px; 
+               display: flex; 
+               align-items: center;
+               gap: 5px;
+               text-decoration: none;
+               font-weight: bold;
+               transition: background 0.3s ease;
+           ">
+            ✏️ Edit
+        </a>
+
+        <!-- Delete Button -->
+        <form action="{{ route('document.destroy', $doc->id) }}" method="POST" 
+              onsubmit="return confirm('Are you sure you want to delete this document?');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger" 
+                    style="
+                        background-color: #d32f2f; 
+                        color: white; 
+                        padding: 8px 15px; 
+                        border-radius: 5px; 
+                        display: flex; 
+                        align-items: center;
+                        gap: 5px;
+                        border: none;
+                        cursor: pointer;
+                        font-weight: bold;
+                        transition: background 0.3s ease;
+                    ">
+                🗑️ Delete
+            </button>
+        </form>
+    </div>
+</td>
+
                         <td>{{ $doc->document_type }}</td>
                         <td>{{ $doc->document_title }}</td>
                         <td>

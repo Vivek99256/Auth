@@ -15,8 +15,9 @@ class Student extends Model
         'quota', 'gender', 'photo', 'religion', 'caste', 'blood_group', 'adhar_no'
     ];
 
-    public function pastEducations()
+    public function pastEducation()
     {
-        return $this->hasMany(PastEducation::class, 'past_id');
+        return $this->hasMany(PastEducation::class);
     }
+
 }

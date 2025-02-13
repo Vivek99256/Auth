@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Student;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use App\Models\PastEducation;
+use Validator;
 
 class StudentController extends Controller
 {
@@ -81,47 +83,111 @@ class StudentController extends Controller
     /**
      * Update the specified student in storage.
      */
-    public function update(Request $request, Student $students)
+    public function update(Request $request, $id)
+{
+    $student = Student::findOrFail($id);
+    // echo "<pre>";print_r($id);exit;
+    $validatedData = Validator::make($request->all(),[
+        'stud_name' => 'required|string|max:255',
+        'mid_name' => 'nullable|string|max:255',
+        'surname' => 'required|string|max:255',
+        'stud_mobile_no' => 'required|string|max:15',
+        'birthdate' => 'required|date',
+        'father_mobile_no' => 'required|string|max:15',
+        'email' => 'required|email|max:255',
+        'address' => 'required|string',
+        'state' => 'required|string|max:255',
+        'city' => 'required|string|max:255',
+        'pincode' => 'required|string|max:10',
+        'religion' => 'required|string|max:255',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+    if ($validatedData->fails()) {
+        return response()->json([
+            'status' => false,
+            'message' => 'validation error',
+            'errors' => $validatedData->errors()
+        ], 401);
+    } 
+
+    $updateArr = [
+        'stud_name' =>$request->stud_name,
+        'mid_name' => $request->mid_name,
+        'surname' => $request->surname,
+        'stud_mobile_no' => $request->stud_mobile_no,
+        'birthdate' => $request->birthdate,
+        'father_mobile_no' => $request->father_mobile_no,
+        'email' => $request->email,
+        'address' => $request->address,
+        'state' => $request->state,
+        'city' => $request->city,
+        'pincode' => $request->pincode,
+        'religion' => $request->religion,
+    ];
+    // Handle photo upload
+    if ($request->hasFile('photo')) {
+        if ($student->photo) {
+            Storage::disk('public')->delete($student->photo); // Delete old photo
+        }
+        $path = $request->file('photo')->store('photos', 'public');
+        $updateArr['photo'] = $path;
+    }
+
+    // $student->update($updateArr);
+    Student::where('id',$id)->update($updateArr);
+    return redirect()->route('students.index')->with('success', 'Student updated successfully.');
+}
+
+public function pastEducation($id)
+{
+    $student = Student::findOrFail($id);
+    return view('admin.students.past', compact('student'));
+}
+
+
+public function editPast(Student $student)
+    {
+        $pastEducationRecords = PastEducation::where('student_id', $student->id)->get();
+        return view('students.past', compact('student', 'pastEducationRecords'));
+    }
+
+    public function storePastEducation(Request $request, Student $student)
     {
         $request->validate([
-            'stud_name' => 'required|string|max:255',
-            'mid_name' => 'nullable|string|max:255',
-            'surname' => 'required|string|max:255',
-            'stud_mobile_no' => 'required|string|max:15',
-            'birthdate' => 'required|date',
-            'father_mobile_no' => 'required|string|max:15',
-            'email' => 'required|email|max:255',
-            'address' => 'required|string',
-            'state' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'pincode' => 'required|string|max:10',
-            'section' => 'required|string|max:255',
-            'standard' => 'required|string|max:255',
-            'division' => 'required|string|max:255',
-            'quota' => 'required|string|max:255',
-            'gender' => 'required|string|max:255',
-            'religion' => 'required|string|max:255',
-            'caste' => 'required|string|max:255',
-            'blood_group' => 'required|string|max:255',
-            'adhar_no' => 'required|string|max:20',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'previous_school' => 'required|string|max:255',
+            'last_standard'   => 'required|string|max:255',
+            'percentage'      => 'required|string|max:10',
+            'board'           => 'required|string|max:255',
         ]);
-    
-        // Update student details (excluding photo)
-        $students->fill($request->except('photo'));
-    
-        // Handle photo upload
-        if ($request->hasFile('photo')) {
-            if ($students->photo) {
-                Storage::disk('public')->delete($students->photo); // Delete old photo
-            }
-            $path = $request->file('photo')->store('photos', 'public');
-            $students->photo = $path;
-        }
-    
-        $students->save();
-    
-        return redirect()->route('admin.students.index')->with('success', 'Student updated successfully.');
+
+        PastEducation::create([
+            'student_id'      => $student->id,
+            'previous_school' => $request->previous_school,
+            'last_standard'   => $request->last_standard,
+            'percentage'      => $request->percentage,
+            'board'           => $request->board,
+        ]);
+
+        return redirect()->route('students.past', $student->id)->with('success', 'Past education details saved.');
     }
+
+
+
+    public function showPastEducation($id)
+    {
+        $student = Student::findOrFail($id);
+        $pastEducationRecords = PastEducation::where('student_id', $id)->get();
+    
+        return view('admin.students.past', compact('student', 'pastEducationRecords'));
+    }
+
+    public function destroyPastEducation($studentId, $pastEducationId)
+{
+    $pastEducation = PastEducation::findOrFail($pastEducationId);
+    $pastEducation->delete();
+
+    return redirect()->back()->with('success', 'Past education record deleted successfully.');
+}
+
     
 }

@@ -54,8 +54,20 @@ Route::middleware(['auth','adminMiddleware'])->group(function(){
     Route::get('/admin/students/document/{id}', [DocumentController::class, 'index'])->name('students.document');
     Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
    // Route::resource('students', StudentController::class);
-    Route::put('/admin/students/{id}', [StudentController::class, 'update'])->name('students.update');
+    Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
 
-    Route::post('/past-education/store', [PastEducationController::class, 'store'])->name('past-education.store');
-    Route::get('/past-education/create/{student_id}', [PastEducationController::class, 'create'])->name('past.create');
+    // Route::post('/past-education/store', [PastEducationController::class, 'store'])->name('past-education.store');
+    // Route::get('/past-education/create/{student_id}', [PastEducationController::class, 'create'])->name('past.create');
+    Route::delete('/documents/{id}', [DocumentController::class, 'destroy'])->name('document.destroy');
+    Route::get('/documents/{id}/edit', [DocumentController::class, 'edit'])->name('document.edit');
+    Route::put('/documents/{id}', [DocumentController::class, 'update'])->name('document.update');
+    Route::get('/students/{id}/past', [StudentController::class, 'showPastEducation'])->name('students.past');
+    Route::get('/students/{student}/past', [StudentController::class, 'editPast'])->name('students.past');
+Route::post('/students/{student}/past/store', [StudentController::class, 'storePastEducation'])->name('students.past.store');
+Route::delete('/students/{student}/past/{pastEducation}', [StudentController::class, 'destroyPastEducation'])->name('students.past.destroy');
+
+
+
+
+
 });
