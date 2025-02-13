@@ -24,8 +24,8 @@
                 </x-nav-link>  
  
 
-                <x-nav-link href="admin/user" :active="request()->routeIs('admin.user')">
-                    {{ __('User') }} 
+                <x-nav-link href="/admin/students/student_report" :active="request()->routeIs('admin.user')">
+                    {{ __('Report') }} 
                 </x-nav-link>  
                 @endif
 
