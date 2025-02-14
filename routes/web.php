@@ -10,7 +10,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\PastEducationController;
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 
