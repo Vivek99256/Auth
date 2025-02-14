@@ -74,5 +74,11 @@ Route::get('/student-report', [StudentController::class, 'reportPage'])->name('s
 Route::get('/student-report-search', [StudentController::class, 'reportSearch'])->name('student.search');
 Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('students.delete');
 Route::get('/admin/students/pdf', [StudentController::class, 'generatePDF'])->name('student.pdf');
+Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+
+Route::get('/student/excel', [StudentController::class, 'downloadExcel'])->name('student.excel');
+Route::get('/export-csv', [StudentController::class, 'exportCSV'])->name('student.export.csv');
+
+
 
 });

@@ -8,6 +8,9 @@ use App\Models\Student;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use App\Models\PastEducation;
+use App\Exports\StudentsExport;
+use App\Exports\StudentsCSVExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 
 class StudentController extends Controller
@@ -246,5 +249,24 @@ public function generatePDF(Request $request)
 
         return $pdf->download('student_report.pdf');
     }
+
+    public function downloadExcel(Request $request)
+{
+    $section = $request->query('section');
+    $standard = $request->query('standard');
+    $division = $request->query('division');
+
+    return Excel::download(new StudentsExport($section, $standard, $division), 'students.xlsx');
+}
+
+public function exportCSV(Request $request)
+{
+    $standard = $request->input('standard');
+    $division = $request->input('division');
+
+    return Excel::download(new StudentsCSVExport($standard, $division), 'students.csv', \Maatwebsite\Excel\Excel::CSV);
+}
+
+    
     
 }

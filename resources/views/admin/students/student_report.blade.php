@@ -161,6 +161,9 @@
     <a href="#" onclick="downloadPDF()" class="btn-download">
         🖨️ PDF
     </a>
+    <a href="#" onclick="downloadExcel()" class="btn-download">📊 Excel</a>
+    <a href="#" onclick="downloadCSV()" class="btn-download">📑 CSV</a>
+    <a href="#" onclick="printReport()" class="btn-download">🖨️ Print</a>
 </div>
             <div class="search-container">
                 <div>
@@ -284,5 +287,27 @@
         console.log(url);
         window.location.href = url;
     }
+
+    function downloadCSV() {
+        let section = document.getElementById('section').value;
+        let standard = document.getElementById('standard').value;
+        let division = document.querySelector('[name="division"]').value;
+        
+        let url = `{{ route('student.export.csv') }}?section=${section}&standard=${standard}&division=${division}`;
+        window.location.href = url;
+    }
+
+    function downloadExcel() {
+    let section = document.getElementById('section').value;
+    let standard = document.getElementById('standard').value;
+    let division = document.querySelector('[name="division"]').value;
+    
+    let url = `{{ route('student.excel') }}?section=${section}&standard=${standard}&division=${division}`;
+    window.location.href = url;
+}
+
+function printReport() {
+    window.print();
+}
     </script>
 </x-app-layout>
