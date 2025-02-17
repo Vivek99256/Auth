@@ -1,4 +1,4 @@
-<x-app-layout>
+
 <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
@@ -9,12 +9,6 @@
     margin: 0;
     padding: 0;
 }
-
-@keyframes gradientBG {
-    0% { background: linear-gradient(135deg, #FFDEE9, #B5FFFC); }
-    100% { background: linear-gradient(135deg, #FA8BFF, #2BD2FF, #2BFF88); }
-}
-
 
         .container {
             max-width: 1100px;
@@ -310,4 +304,4 @@ function printReport() {
     window.print();
 }
     </script>
-</x-app-layout>
+

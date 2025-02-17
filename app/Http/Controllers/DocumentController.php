@@ -15,6 +15,8 @@ class DocumentController extends Controller
         $documents = Document::where('student_id', $id)->get();
 
         return view('admin.students.document', compact('student', 'documents'));
+
+        
     }
 
 
